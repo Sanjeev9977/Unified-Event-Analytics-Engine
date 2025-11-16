@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8.1
+    container_name: unified-event-analytics-engine-mysql
+    ports:
+      - "3307:3306"      # host port changed to 3307 to avoid conflict
+    environment:
+      MYSQL_ROOT_PASSWORD: user@123
+      MYSQL_DATABASE: analytics_db
+    networks:
+      - analytics-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.2.12
+    container_name: unified-event-analytics-engine-redis
+    ports:
+      - "15548:6379"
+    networks:
+      - analytics-network
+
+  app:
+    image: unified-event-analytics-engine:latest
+    container_name: unified-event-analytics-engine
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/analytics_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: user@123
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_PASSWORD: sanjeev@123
+    ports:
+      - "8080:8080"
+    networks:
+      - analytics-network
+
+networks:
+  analytics-network:
+    driver: bridge
