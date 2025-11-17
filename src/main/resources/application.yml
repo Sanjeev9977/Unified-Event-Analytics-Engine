@@ -16,17 +16,19 @@ spring:
 
   cache:
     type: redis
+
   data:
     redis:
       host: ${SPRING_REDIS_HOST:localhost}
       port: ${SPRING_REDIS_PORT:6379}
       password: ${SPRING_REDIS_PASSWORD:}
-      username: ${SPRING_REDIS_USERNAME:default}
       repositories:
         enabled: false
+      ssl:
+        enabled: true   # Railway Redis uses TLS/SSL
 
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${PORT:8080}
 
 logging:
   level:
