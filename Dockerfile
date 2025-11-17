@@ -28,11 +28,11 @@ FROM eclipse-temurin:17-jdk-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy jar from builder stage
-COPY --from=builder /app/target/06-SB-REST-WebClient-1-0.0.1-SNAPSHOT.jar app.jar
+# Copy the built jar from the builder stage (using wildcard)
+COPY --from=builder /app/target/*.jar app.jar
 
 # Expose application port
 EXPOSE 8080
 
-# Run the Spring Boot application
+# Run the Spring Boot application in the foreground
 ENTRYPOINT ["java", "-jar", "app.jar"]

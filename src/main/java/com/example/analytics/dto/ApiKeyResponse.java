@@ -9,7 +9,7 @@ public class ApiKeyResponse {
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
 
-    // Getters and Setters
+   
     public String getAppName() {
         return appName;
     }
