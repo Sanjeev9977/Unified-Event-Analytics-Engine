@@ -10,8 +10,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: false
+      ddl-auto: update        # For production, consider 'validate' or 'none'
+    show-sql: false           # Turn off SQL logging in prod
     database-platform: org.hibernate.dialect.MySQLDialect
 
   cache:
@@ -25,22 +25,25 @@ spring:
       repositories:
         enabled: false
       ssl:
-        enabled: false
+        enabled: false         # Railway Redis does NOT need TLS
 
 server:
-  port: ${PORT:8080}
+  port: ${PORT:8080}         # Railway automatically sets PORT
 
 logging:
   level:
-    root: info
+    root: info               # Keep root logging at info level
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 management:
+  server:
+    base-path: /              # Expose endpoints at root path, so /health works
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info  # Expose health and info endpoints
   endpoint:
     health:
-      show-details: always
+      show-details: always     # Show DB and Redis details in health
+
