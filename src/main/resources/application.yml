@@ -5,14 +5,14 @@ spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}   # Use your Railway DB password
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: update          # For production, consider 'validate' or 'none'
     show-sql: false
-    open-in-view: false
+    open-in-view: false         # Avoid lazy loading outside transaction issues
 
   cache:
     type: redis
@@ -21,7 +21,7 @@ spring:
     redis:
       host: ${SPRING_REDIS_HOST}
       port: ${SPRING_REDIS_PORT}
-      password: ${SPRING_REDIS_PASSWORD}       # Use your Railway Redis password if any
+      password: ${SPRING_REDIS_PASSWORD}   # Leave blank if none
       ssl:
         enabled: false
       repositories:
@@ -46,3 +46,9 @@ management:
   endpoint:
     health:
       show-details: always
+
+info:
+  app:
+    name: Unified Event Analytics Engine
+    version: 0.0.1-SNAPSHOT
+    description: Railway Deployment
